@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+  <div class="col-md-12">
+  <h3>User Info Forms</h3>
+  </div>
+<div class="col-md-3">
+<form id="userInfo">
+<div class="form-group">
+<label for="userName">Name</label>
+<input type="text" class="form-control form-control-sm" name="userName">
+</div>
+<div class="form-group">
+<label for="userName">Gender</label><br>
+<div class="form-check-inline">
+ <label class="form-check-label">
+   <input type="radio" class="form-check-input" name="gender" value="male">Male
+ </label>
+</div>
+<div class="form-check-inline">
+ <label class="form-check-label">
+   <input type="radio" class="form-check-input" name="gender" value="female">Female
+ </label>
+</div>
+<div class="form-check-inline">
+ <label class="form-check-label">
+   <input type="radio" class="form-check-input" name="gender" value="trans">Transgender
+ </label>
+</div>
+</div>
+<div class="form-group">
+<label for="dob">Date Of Birth</label>
+<input type="date" class="form-control form-control-sm" name="dob">
+</div>
+<div class="form-group">
+<label for="phoneNumber">Phone Number</label>
+<input type="text" class="form-control form-control-sm" name="phoneNumber">
+</div>
+<div class="form-group">
+<label for="emailId">EmailID</label>
+<input type="text" class="form-control form-control-sm" name="emailId">
+</div>
+<div class="form-group">
+<label for="address">Address</label>
+<textarea class="form-control" name="address" rows="3" cols="20" ></textarea>
+</div>
+<button type="button" class="btn btn-success" onclick="insertUserInfo()">Submit</button>
+</form>
+</div>
+<div class="col-md-9">
+<table class="table table-striped">
+   <thead>
+     <tr>
+       <th>Name</th>
+       <th>Gender</th>
+       <th>DateOfBirth</th>
+       <th>PhoneNumber</th>
+       <th>EmailID</th>
+       <th>Address</th>
+       <th>Action</th>
+     </tr>
+   </thead>
+   <tbody id="userDetails">
+   
+   </tbody>
+</table>
+<!-- The Modal -->
+<div class="modal" id="myModal">
+ <div class="modal-dialog">
+   <div class="modal-content">
+     <!-- Modal Header -->
+     <div class="modal-header">
+       <h4 class="modal-title">UserInfo Edit</h4>
+       <button type="button" class="close" data-dismiss="modal">&times;</button>
+     </div>
+     <!-- Modal body -->
+     <div class="modal-body">
+      <form id="userInfoModal">
+      <div class="form-group">
+<label for="userName">Name</label>
+<input type="text" class="form-control form-control-sm" name="userName">
+</div>
+<div class="form-group">
+<label for="userName">Gender</label><br>
+<input type="text" class="form-control form-control-sm" name="gender">
+</div>
+<div class="form-group">
+<label for="dob">Date Of Birth</label>
+<input type="date" class="form-control form-control-sm" name="dob">
+</div>
+<div class="form-group">
+<label for="phoneNumber">Phone Number</label>
+<input type="text" class="form-control form-control-sm" name="phoneNumber">
+</div>
+<div class="form-group">
+<label for="emailId">EmailID</label>
+<input type="text" class="form-control form-control-sm" name="emailId">
+</div>
+<div class="form-group">
+<label for="address">Address</label>
+<textarea class="form-control" name="address" rows="3" cols="20" ></textarea>
+</div>
+      </form>
+     </div>
+     <!-- Modal footer -->
+     <div class="modal-footer" id="footer">
+     
+     </div>
+   </div>
+ </div>
+</div>
+</div>
+  </div>
+</div>
+<script>
+getUserInfo();
+
+
+function insertUserInfo(){
+var responseData ;
+ var userName=document.getElementById("userInfo").elements.item(0).value;
+ var gender = document.getElementById("userInfo").elements.item(1).value;
+ var userDob=document.getElementById("userInfo").elements.item(4).value;
+ var phoneNumber = document.getElementById("userInfo").elements.item(5).value;
+ var emailId=document.getElementById("userInfo").elements.item(6).value;
+ var address = document.getElementById("userInfo").elements.item(7).value;
+ 
+ var userObj = {
+	"userName":userName,
+	"gender":gender,
+	"dateOfBirth":userDob,
+	"phoneNumber":phoneNumber,
+	"emailId":emailId,
+	"address":address,
+	"daoclass":"UserInfo",
+	"method":"addUser"
+     };
+ 
+ console.log("userInfo :",userObj);
+ 
+ var xhttp = new XMLHttpRequest();
+ xhttp.onreadystatechange = function() {
+   if (this.readyState == 4 && this.status == 200) {
+    responseData= JSON.parse(this.responseText);
+   
+    if(responseData.status == "1") {
+    getUserInfo();
+    alert("Data inserted successfully!");
+    } else {
+    alert("Not inserted!")
+    }
+}
+ };
+ xhttp.open("POST", "/crudApp/userInfo", true);
+ xhttp.setRequestHeader("Content-type", "application/json");
+ xhttp.send(JSON.stringify(userObj));
+}
+
+
+
+
+
+function getUserInfo() {
+var xhttp = new XMLHttpRequest();
+ xhttp.onreadystatechange = function() {
+   if (this.readyState == 4 && this.status == 200) {
+    var getUserInfo= JSON.parse(this.responseText);
+  var appendValue ="";
+    for(var i=0;i<getUserInfo.data[0].length;i++) {
+    appendValue += "<tr><td>"+getUserInfo.data[0][i].userName+"</td><td>"+getUserInfo.data[0][i].gender+"</td><td>"+getUserInfo.data[0][i].userDob+"</td><td>"+getUserInfo.data[0][i].phoneNumber+"</td><td>"+getUserInfo.data[0][i].emailId+"</td><td>"+getUserInfo.data[0][i].address+"</td><td><button type='button' class='btn btn-primary btn-sm' onclick='editUserInfo("+getUserInfo.data[0][i].userId+")'>Edit</button>  <button type='button' class='btn btn-danger btn-sm' onclick='deleteUserInfo("+getUserInfo.data[0][i].userId+")'>Delete</button></td></tr>";
+   
+    }
+    document.getElementById("userDetails").innerHTML = appendValue;
+   }
+};
+xhttp.open("GET", "/crudApp/userInfo", true);
+xhttp.setRequestHeader("Content-type", "application/json");
+xhttp.send();
+}
+function deleteUserInfo(userId) {
+var userData = {
+    "userId":userId
+    };
+var responseData;
+var xhttp = new XMLHttpRequest();
+ xhttp.onreadystatechange = function() {
+   if (this.readyState == 4 && this.status == 200) {
+    responseData= JSON.parse(this.responseText);
+   
+    if(responseData.status == "1") {
+    getUserInfo();
+    alert("Data Deleted successfully!");
+    } else {
+    alert("Cannot Deleted!")
+    }
+   }
+};
+xhttp.open("DELETE", "/crudApp/userInfo", true);
+xhttp.setRequestHeader("Content-type", "application/json");
+xhttp.send(JSON.stringify(userData));
+}
+function editUserInfo(userId) {
+var userData = {
+    "userId":userId,
+    "action":"getUserData"
+    };
+var responseData;
+var xhttp = new XMLHttpRequest();
+ xhttp.onreadystatechange = function() {
+   if (this.readyState == 4 && this.status == 200) {
+    responseData= JSON.parse(this.responseText);
+    document.getElementById("userInfoModal").elements.item(0).value = responseData.status[0][0].userName;
+    document.getElementById("userInfoModal").elements.item(1).value = responseData.status[0][0].gender;
+    document.getElementById("userInfoModal").elements.item(2).value = responseData.status[0][0].userDob;
+    document.getElementById("userInfoModal").elements.item(3).value = responseData.status[0][0].phoneNumber;
+    document.getElementById("userInfoModal").elements.item(4).value = responseData.status[0][0].emailId;
+    document.getElementById("userInfoModal").elements.item(5).value = responseData.status[0][0].address;
+    document.getElementById("footer").innerHTML = "<button type='button' class='btn btn-primary btn-sm' onclick='updateUserInfo("+userId+")'>Update</button> <button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'>Close</button>";
+    $("#myModal").modal({show: true});
+    console.log("User Id Data",responseData.status[0][0].phoneNumber);
+   }
+};
+xhttp.open("PUT", "/crudApp/userInfo", true);
+xhttp.setRequestHeader("Content-type", "application/json");
+xhttp.send(JSON.stringify(userData));
+}
+function updateUserInfo(userId) {
+var responseData ;
+ var userName=document.getElementById("userInfoModal").elements.item(0).value;
+ var gender = document.getElementById("userInfoModal").elements.item(1).value;
+ var userDob=document.getElementById("userInfoModal").elements.item(2).value;
+ var phoneNumber = document.getElementById("userInfoModal").elements.item(3).value;
+ var emailId=document.getElementById("userInfoModal").elements.item(4).value;
+ var address = document.getElementById("userInfoModal").elements.item(5).value;
+ 
+ var userObj = {
+"userName":userName,
+"gender":gender,
+"dateOfBirth":userDob,
+"phoneNumber":phoneNumber,
+"emailId":emailId,
+"address":address,
+"userId":userId,
+"action":"updateUserInfo"
+     };
+ 
+ 
+var responseData;
+var xhttp = new XMLHttpRequest();
+ xhttp.onreadystatechange = function() {
+   if (this.readyState == 4 && this.status == 200) {
+    responseData= JSON.parse(this.responseText);
+    if(responseData.status == "1") {
+    $('#myModal').modal('hide');
+    getUserInfo();
+    //alert("data Updated successfully !");
+    } else {
+    $('#myModal').modal('hide');
+    alert("data Cannot Update!");
+    }
+   }
+};
+xhttp.open("PUT", "/crudApp/userInfo", true);
+xhttp.setRequestHeader("Content-type", "application/json");
+xhttp.send(JSON.stringify(userObj));
+}
+</script>
+</body>
+</html>
