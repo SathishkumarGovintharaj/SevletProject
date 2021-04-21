@@ -10,9 +10,7 @@ import com.model.UserInfoModel;
 public class UserInfoDao
 {
 	
-	public UserInfoDao() {
-		new UserInfoDao();
-	}
+	
 JSONObject s=null;
 static Connection con =null;
 public static void getConnection() throws ClassNotFoundException, SQLException {
