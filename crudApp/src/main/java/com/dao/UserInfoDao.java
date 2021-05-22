@@ -84,7 +84,7 @@ e.printStackTrace();
 public JSONObject getUserInfoById(JSONObject o) {
 UserInfoModel userObj=new UserInfoModel();
 ArrayList<UserInfoModel> usersArr = new ArrayList<>();
-try {  
+try { 
 UserInfoDao.getConnection();
 Integer userId= o.getInt("userId");
             PreparedStatement ps=con.prepareStatement("select * from userinfo where user_id=?");
