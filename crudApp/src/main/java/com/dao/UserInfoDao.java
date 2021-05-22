@@ -37,7 +37,7 @@ System.out.println(e);
 }
 return s;
 }
-public JSONObject getUsersInfo() {
+public JSONObject getUsersInfo(JSONObject o) {
 try
 {
 UserInfoDao.getConnection();

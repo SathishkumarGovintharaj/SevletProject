@@ -143,8 +143,7 @@ var responseData ;
 	"phoneNumber":phoneNumber,
 	"emailId":emailId,
 	"address":address,
-	"daoclass":"UserInfo",
-	"method":"addUser"
+	"methodName":"addUser"
      };
  
  console.log("userInfo :",userObj);
@@ -172,6 +171,9 @@ var responseData ;
 
 
 function getUserInfo() {
+	 var userObj = {
+				"methodName":"getUsersInfo"
+			     };
 var xhttp = new XMLHttpRequest();
  xhttp.onreadystatechange = function() {
    if (this.readyState == 4 && this.status == 200) {
@@ -184,13 +186,14 @@ var xhttp = new XMLHttpRequest();
     document.getElementById("userDetails").innerHTML = appendValue;
    }
 };
-xhttp.open("GET", "/crudApp/userInfo", true);
+xhttp.open("POST", "/crudApp/userInfo", true);
 xhttp.setRequestHeader("Content-type", "application/json");
-xhttp.send();
+xhttp.send(JSON.stringify(userObj));
 }
 function deleteUserInfo(userId) {
 var userData = {
-    "userId":userId
+    "userId":userId,
+    "methodName":"deleteUserInfo"
     };
 var responseData;
 var xhttp = new XMLHttpRequest();
@@ -213,7 +216,7 @@ xhttp.send(JSON.stringify(userData));
 function editUserInfo(userId) {
 var userData = {
     "userId":userId,
-    "action":"getUserData"
+    "methodName":"getUserInfoById"
     };
 var responseData;
 var xhttp = new XMLHttpRequest();
@@ -252,7 +255,7 @@ var responseData ;
 "emailId":emailId,
 "address":address,
 "userId":userId,
-"action":"updateUserInfo"
+"methodName":"updateUserInfo"
      };
  
  
