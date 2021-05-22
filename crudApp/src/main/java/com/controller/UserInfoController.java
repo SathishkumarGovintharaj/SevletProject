@@ -22,7 +22,7 @@ import com.dao.UserInfoDao;
 public class UserInfoController extends HttpServlet {
 
 private static final long serialVersionUID = 1L;
-	UserInfoDao daoObj=null;
+	UserInfoDao daoObj=null; 
 	public static JSONObject requestObject(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String requestObj = "";
 		    BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
